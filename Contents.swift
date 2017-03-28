@@ -246,22 +246,31 @@ extension UIColor {
 let mainColour = UIColor(red: 1.0, green: 0.0, blue: 0.004, alpha: 1.000)
 
 // Calculate the complement and neutrals
+let darkenPercent = CGFloat(0.5)
+let lightenPercent = CGFloat(0.2
+)
 let hex = mainColour.hexString().uppercased()
 let complement = mainColour.complement()
 let neutral = UIColor.harmoniousMix(complement, baseColour: mainColour)
-let neutralHighlight = neutral.lighten(percent: 0.4)
-let neutralShadow = neutral.darken(percent: 0.4)
+let neutralHighlight = neutral.lighten(percent: lightenPercent)
+let neutralShadow = neutral.darken(percent: darkenPercent)
 let complementNeutral = UIColor.harmoniousMix(mainColour, baseColour: complement)
-let complementNeutralHighlight = complementNeutral.lighten(percent: 0.4)
-let complementNeutralShadow = complementNeutral.darken(percent: 0.4)
+let complementNeutralHighlight = complementNeutral.lighten(percent: lightenPercent)
+let complementNeutralShadow = complementNeutral.darken(percent: darkenPercent)
+let somewhatBlack = UIColor.harmoniousMix(complementNeutral, baseColour: UIColor.black)
+let somewhatWhite = UIColor.harmoniousMix(complementNeutral, baseColour: UIColor.white)
+
+// Set up Array of swatches for our palette
+typealias Swatch = (name: String, colour: UIColor)
+let colourArray: [Swatch] = [ ("mainColour", mainColour), ("complementaryColour", complement), ("neutralShadow", neutralShadow), ("neutral",  neutral), ("neutralHighlight",  neutralHighlight),  ("complementNeutralShadow", complementNeutralShadow),  ("complementNeutral", complementNeutral),  ("complementNeutralHighlight", complementNeutralHighlight), ("somewhatBlack", somewhatBlack), ("somewhatWhite", somewhatWhite)]
 
 // Display palette
-let colourArray = [ mainColour, complement, neutralShadow, neutral, neutralHighlight, complementNeutralShadow, complementNeutral, complementNeutralHighlight]
 let palette = UIImageView.init(frame: CGRect.init(x: 0, y: 0, width: 60 * colourArray.count, height: 60))
-for (index, colour) in colourArray.enumerated() {
+for (index, swatch) in colourArray.enumerated() {
     let rect = CGRect.init(x: 60 * index, y: 0, width: 60, height: 60)
     let colourImage = UIImageView.init(frame: rect)
-    colourImage.backgroundColor = colour
+    colourImage.backgroundColor = swatch.colour
     palette.addSubview(colourImage)
+    print("let \(swatch.name) = UIColor(red: \(swatch.colour.red()), green: \(swatch.colour.green()), blue: \(swatch.colour.blue()), alpha: \(swatch.colour.alpha()))")
 }
 palette
